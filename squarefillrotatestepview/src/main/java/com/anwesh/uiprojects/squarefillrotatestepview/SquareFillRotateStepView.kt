@@ -218,6 +218,13 @@ class SquareFillRotateStepView(ctx : Context) : View(ctx) {
                 animator.start()
             }
         }
+    }
 
+    companion object {
+        fun create(activity : Activity) : SquareFillRotateStepView {
+            val view : SquareFillRotateStepView = SquareFillRotateStepView(activity)
+            activity.setContentView(view)
+            return view
+        }
     }
 }
