@@ -113,7 +113,7 @@ class SquareFillRotateStepView(ctx : Context) : View(ctx) {
             }
         }
 
-        fun start(cb : () -> Unit) {
+        fun start() {
             if (!animated) {
                 animated = true
                 view.postInvalidate()
@@ -193,5 +193,29 @@ class SquareFillRotateStepView(ctx : Context) : View(ctx) {
         fun startUpdating(cb  : () -> Unit) {
             curr.startUpdating(cb)
         }
+    }
+
+    data class Renderer(var view : SquareFillRotateStepView) {
+
+        private val sfrs : SquareFillRotateStep = SquareFillRotateStep(0)
+
+        private val animator : Animator = Animator(view)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(Color.parseColor("#BDBDBD"))
+            sfrs.draw(canvas, paint)
+            animator.animate {
+                sfrs.update {i, scl ->
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            sfrs.startUpdating {
+                animator.start()
+            }
+        }
+
     }
 }
