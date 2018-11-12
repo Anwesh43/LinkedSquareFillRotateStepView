@@ -26,6 +26,8 @@ val SC_GAP : Float = 0.05f
 
 val FOREGROUND_COLOR : Int = Color.parseColor("#4A148C")
 
+val DELAY : Long = 20
+
 fun Int.getInverse() : Float = 1f / this
 
 fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.getInverse(), Math.max(0f, this - n.getInverse() * i)) * n
@@ -108,7 +110,7 @@ class SquareFillRotateStepView(ctx : Context) : View(ctx) {
             if (animated) {
                 cb()
                 try {
-                    Thread.sleep(50)
+                    Thread.sleep(DELAY)
                     view.invalidate()
                 } catch (ex : Exception) {
 
