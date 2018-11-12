@@ -34,6 +34,32 @@ fun Float.getScaleFactor() : Float = Math.floor(this/0.5).toFloat()
 
 fun Float.updateScaleBy(dir : Float) : Float = SC_GAP * dir * ((1 - getScaleFactor()) * rects.getInverse() + getScaleFactor())
 
+fun Canvas.drawSFRSNode(i : Int, scale : Float, paint : Paint) {
+    val w : Float = width.toFloat()
+    val h : Float = height.toFloat()
+    val gap : Float = w / (nodes + 1)
+    val size : Float = gap / SIZE_FACTOR
+    paint.strokeWidth = Math.min(w, h) / STROKE_FACTOR
+    paint.strokeCap = Paint.Cap.ROUND
+    paint.color = FOREGROUND_COLOR
+    val sc1 : Float = scale.divideScale(0, 2)
+    val sc2 : Float = scale.divideScale(1, 2)
+    val deg : Float = 360f / rects
+    save()
+    translate(gap * (i + 1), h/2)
+    rotate(90f * sc2)
+    paint.style = Paint.Style.STROKE
+    drawRect(RectF(-size, -size, size, size), paint)
+    for (j in 0..(rects - 1)) {
+        val sc : Float = sc1.divideScale(j, rects)
+        save()
+        rotate(deg * j)
+        drawRect(RectF(0f, 0f, size * sc, size * sc), paint)
+        restore()
+    }
+    restore()
+}
+
 class SquareFillRotateStepView(ctx : Context) : View(ctx) {
 
     private val paint : Paint = Paint(Paint.ANTI_ALIAS_FLAG)
