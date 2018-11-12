@@ -12,6 +12,7 @@ import android.graphics.RectF
 import android.graphics.Color
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 
 val nodes : Int = 5
 
@@ -24,6 +25,14 @@ val SIZE_FACTOR : Int = 3
 val SC_GAP : Float = 0.05f
 
 val FOREGROUND_COLOR : Int = Color.parseColor("#4A148C")
+
+fun Int.getInverse() : Float = 1f / this
+
+fun Float.divideScale(i : Int, n : Int) : Float = Math.min(n.getInverse(), Math.max(0f, this - n.getInverse() * i)) * n
+
+fun Float.getScaleFactor() : Float = Math.floor(this/0.5).toFloat()
+
+fun Float.updateScaleBy(dir : Float) : Float = SC_GAP * dir * ((1 - getScaleFactor()) * rects.getInverse() + getScaleFactor())
 
 class SquareFillRotateStepView(ctx : Context) : View(ctx) {
 
@@ -45,7 +54,9 @@ class SquareFillRotateStepView(ctx : Context) : View(ctx) {
     data class State(var scale : Float = 0f, var prevScale : Float = 0f, var dir : Float = 0f) {
 
         fun update(cb : (Float) -> Unit) {
-            scale += dir * 0.05f
+            val k : Float = scale.updateScaleBy(dir)
+            scale += k
+            Log.d("update scale by", "$k")
             if (Math.abs(scale - prevScale) > 1) {
                 scale = prevScale + dir
                 dir = 0f
