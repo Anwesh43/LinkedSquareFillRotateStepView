@@ -50,6 +50,7 @@ fun Canvas.drawSFRSNode(i : Int, scale : Float, paint : Paint) {
     rotate(90f * sc2)
     paint.style = Paint.Style.STROKE
     drawRect(RectF(-size, -size, size, size), paint)
+    paint.style= Paint.Style.FILL
     for (j in 0..(rects - 1)) {
         val sc : Float = sc1.divideScale(j, rects)
         save()
